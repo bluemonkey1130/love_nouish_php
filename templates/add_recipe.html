@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recipe</title>
+    <!-- Include MDL CSS -->
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <!-- Include MDL JavaScript -->
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+</head>
+<body class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+<header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Add Recipe</span>
+    </div>
+</header>
+<!-- Navigation -->
+<div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">Menu</span>
+    <nav class="mdl-navigation">
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/add_ingredient">Add Ingredient</a>
+        <!-- Add more links as needed -->
+    </nav>
+</div>
+
+<main class="mdl-layout__content">
+    <div class="mdl-layout__tab-panel is-active" id="overview">
+        <div class="page-content mdl-grid">
+
+            <div class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text">Add Recipe</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="recipe_name" name="recipe_name" required>
+                        <label class="mdl-textfield__label" for="recipe_name">Recipe Name</label>
+                    </div>
+                    <h2 class="mdl-card__title-text">Ingredients:</h2>
+                    <div id="ingredients">
+                        <!-- JavaScript can be used to dynamically add ingredient fields -->
+                        <div class="ingredient mdl-grid">
+                            <div class="mdl-cell mdl-cell--6-col">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <select class="mdl-textfield__input" id="ingredient" name="ingredient" required>
+                                        <!-- Populate this select field with available ingredients -->
+                                        {% for ingredient in ingredients %}
+                                        <option value="{{ ingredient[0] }}">{{ ingredient[1] }} ({{ ingredient[2] }})</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label class="mdl-textfield__label" for="ingredient">Ingredient</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--3-col">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="quantity" name="quantity" required>
+                                    <label class="mdl-textfield__label" for="quantity">Quantity</label>
+                                </div>
+                            </div>
+                            <div class="mdl-cell mdl-cell--3-col">
+                                <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect remove">
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="button" id="addIngredient">
+                        Add Ingredient
+                    </button>
+                    <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">
+                        Create Recipe
+                    </button>
+                </div>
+            </div>
+
+            <div class="mdl-cell mdl-cell--12-col">
+                <h2 class="mdl-card__title-text">Recipes</h2>
+                <!-- Grid of recipe cards -->
+                <div class="mdl-grid">
+                    {% for recipe in recipes %}
+                    <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+                        <div class="mdl-card__title">
+                            <h3 class="mdl-card__title-text">{{recipe[1]}}</h3>
+                        </div>
+                        <div class="mdl-card__supporting-text">
+                            <!-- Recipe details go here -->
+                            Ingredients:
+                            <ul>
+                                <li>Ingredient 1</li>
+                                <li>Ingredient 2</li>
+                                <!-- Add more ingredients as needed -->
+                            </ul>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+    // JavaScript for adding and removing ingredient fields
+    document.addEventListener('DOMContentLoaded', function () {
+        const addIngredientButton = document.getElementById('addIngredient');
+        const ingredientsContainer = document.getElementById('ingredients');
+
+        addIngredientButton.addEventListener('click', function () {
+            const ingredientDiv = document.createElement('div');
+            ingredientDiv.className = 'ingredient mdl-grid';
+
+            ingredientDiv.innerHTML = `
+                <div class="mdl-cell mdl-cell--6-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <select class="mdl-textfield__input" id="ingredient" name="ingredient" required>
+                            <!-- Populate this select field with available ingredients -->
+                            {% for ingredient in ingredients %}
+                            <option value="{{ ingredient[0] }}">{{ ingredient[1] }} ({{ ingredient[2] }})</option>
+                            {% endfor %}
+                        </select>
+                        <label class="mdl-textfield__label" for="ingredient">Ingredient</label>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="quantity" name="quantity" required>
+                        <label class="mdl-textfield__label" for="quantity">Quantity</label>
+                    </div>
+                </div>
+                <div class="mdl-cell mdl-cell--3-col">
+                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect remove">
+                        Remove
+                    </button>
+                </div>
+            `;
+
+            const removeButton = ingredientDiv.querySelector('.remove');
+            removeButton.addEventListener('click', function () {
+                ingredientsContainer.removeChild(ingredientDiv);
+            });
+
+            ingredientsContainer.appendChild(ingredientDiv);
+        });
+    });
+</script>
+</body>
+</html>
